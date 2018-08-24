@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace AppPeople.Models
@@ -35,7 +36,7 @@ namespace AppPeople.Models
 
         public void Delete(int pId)
         {
-            People.Remove(GetById(pId));
+            People.Remove(this.GetById(pId));
         }
 
         public void Update(int pId, Person pPerson)

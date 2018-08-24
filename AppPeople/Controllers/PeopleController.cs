@@ -46,9 +46,7 @@ namespace AppPeople.Controllers
 
         public IActionResult Update(int id)
         {
-            ViewData["Person"] = Repository.GetById(id);
-
-            return View();
+            return View(Repository.GetById(id));
         }
 
         [HttpPost]
