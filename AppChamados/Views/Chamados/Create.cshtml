@@ -1,0 +1,77 @@
+@model AppChamados.Models.Chamados
+
+
+@{
+    ViewData["Title"] = "Novo Chamados";
+}
+
+<br>
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+
+<div class="form-horizontal">
+    <form action="./Create" method="Post">
+    
+    <div class="row">
+        <div class="col-sm-6 col-md-2">
+            <div class="form-group">
+                <label for="numeroAtendimento">Número do atendimento</label>
+                <input type="text" class="form-control" id="numeroAtendimento" name="numero" placeholder="Número atendimento" required>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+                <label for="dataAtendimento">Data do atendimento</label>
+                <input type="date" class="form-control" id="dataAtendimento" name="data" placeholder="Data do atendimento" required>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-group">
+                <label for="nomeSolicitante">Nome do solicitante</label>
+                <input type="text" class="form-control" id="nomeSolicitante" name="nome" placeholder="Nome do solicitante" required>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+                <label for="emailSolicitante">E-mail do solicitante</label>
+                <input type="email" class="form-control" id="emailSolicitante" name="email" placeholder="E-mail do solicitante" required>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+                <label for="telefoneSolicitante">Telefone do solicitante</label>
+                <input type="text" class="form-control" id="telefoneSolicitante" name="telefone" placeholder="Telefone do solicitante" required>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <label for="problema">Problema constatado</label>
+                <input type="text" class="form-control" id="problema" name="problema" placeholder="Problema" required>
+            </div>    
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <label for="dataSolucao">Data da solução</label>
+                <input type="date" class="form-control" id="dataSolucao" name="dataSolucao" placeholder="Data da solução do problema" required>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <label for="horaInicio">Data de início da análise</label>
+                <input type="datetime-local" class="form-control" id="horaInicio" name="horaInicio" placeholder="Data de início" required>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <label for="HoraFim">Data final da análise</label>
+                <input type="datetime-local" class="form-control" id="HoraFim" name="HoraFim" placeholder="Data final" required>
+            </div>
+        </div>
+    </div>
+        
+        <button type="submit" class="btn btn-success">Criar</button>
+
+    </form>
+</div>

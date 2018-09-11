@@ -1,0 +1,58 @@
+@model IEnumerable<AppChamados.Models.Chamados>
+
+@{
+    ViewData["Title"] = "Chamados";
+}
+
+<main>
+    <br>
+
+    <h2>@ViewData["Title"]</h2>
+
+    <br>
+
+    <a href="./Chamados/Create" class="btn btn-success">Novo chamado</a>
+
+    <br>
+    <br>
+
+    <table class="table table-striped table-bordered table-hover table-responsive">
+        <caption>Lista de chamados</caption>
+        <thead class="thead-light">
+            <th class="text-center">Id</th>
+            <th class="text-center">Número</th>
+            <th class="text-center">Data</th>
+            <th class="text-center">Nome solicitante</th>
+            <th class="text-center">E-mail</th>
+            <th class="text-center">Telefone</th>
+            <th class="text-center">Problema</th>
+            <th class="text-center">Data da solução</th>
+            <th class="text-center">Hora de início</th>
+            <th class="text-center">Hora Final</th>
+            <th class="text-center">Total de horas</th>
+            <th class="text-center">Ações</th>
+        </thead>
+
+        <tbody>
+            @foreach(var chamado in Model ){
+            <tr>
+                <td>@chamado.id</td>
+                <td>@chamado.numero</td>
+                <td>@chamado.data</td>
+                <td>@chamado.nome</td>
+                <td>@chamado.email</td>
+                <td>@chamado.telefone</td>
+                <td>@chamado.problema</td>
+                <td>@chamado.dataSolucao</td>
+                <td>@chamado.horaInicio</td>
+                <td>@chamado.horaFim</td>
+                <td>@chamado.totalHorasAtendimento horas</td>
+                <td>
+                    <a href="./Chamados/Delete/@chamado.id" class="text-danger"><i class="material-icons">delete</i></a>
+                    <a href="./Chamados/Update/@chamado.id" class="text-info"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</main>

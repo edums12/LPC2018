@@ -1,0 +1,38 @@
+@model IEnumerable<AppPeople.Models.Person>
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<br>
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+
+<a href="People/Create" class="btn btn-primary">Novo cliente</a>
+
+<br><br>
+
+<table class="table">
+    <thead>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Endereço</th>
+        <th>Ações</th>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.GetId</td>
+                <td>@item.Name</td>
+                <td>@item.Address</td>
+                <td>
+                    <a href="People/Update/@item.GetId" class="btn btn-success">Editar</a>
+                    <a href="People/Delete/@item.GetId" class="btn btn-danger">Excluir</a>
+                </td>
+            </tr>
+        }     
+    </tbody>
+</table>

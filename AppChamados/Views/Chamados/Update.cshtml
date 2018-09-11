@@ -1,0 +1,82 @@
+@model AppChamados.Models.Chamados
+
+
+@{
+    ViewData["Title"] = "Editar Chamado";
+}
+
+<br><br>
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+
+<div class="form-horizontal">
+    <form action='@ViewData["base_url"]/Chamados/Update' method="Post">
+
+    <div class="form-group">
+        <input type="hidden" class="form-control" id="id" name="id" value="@Model.id" required>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-6 col-md-2">
+            <div class="form-group">
+                <label for="numeroAtendimento">Número do atendimento</label>
+                <input type="text" class="form-control" id="numeroAtendimento" name="numero" value="@Model.numero" placeholder="Número atendimento" required>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="form-group">
+                <label for="dataAtendimento">Data do atendimento</label>
+                <input type="date" class="form-control" id="dataAtendimento" name="data" value="@Model.dataDisplay" placeholder="Data do atendimento" required>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="form-group">
+                <label for="nomeSolicitante">Nome do solicitante</label>
+                <input type="text" class="form-control" id="nomeSolicitante" name="nome" value="@Model.nome" placeholder="Nome do solicitante" required>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+                <label for="emailSolicitante">E-mail do solicitante</label>
+                <input type="email" class="form-control" id="emailSolicitante" name="email" value="@Model.email" placeholder="E-mail do solicitante" required>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="form-group">
+                <label for="telefoneSolicitante">Telefone do solicitante</label>
+                <input type="text" class="form-control" id="telefoneSolicitante" name="telefone" value="@Model.telefone" placeholder="Telefone do solicitante" required>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+                <label for="problema">Problema constatado</label>
+                <input type="text" class="form-control" id="problema" name="problema" value="@Model.problema" placeholder="Problema" required>
+            </div>   
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <label for="dataSolucao">Data da solução</label>
+                <input type="date" class="form-control" id="dataSolucao" name="dataSolucao" value="@Model.dataSolucaoDisplay" placeholder="Data da solução do problema" required>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <label for="horaInicio">Data de início da análise</label>
+                <input type="datetime-local" class="form-control" id="horaInicio" name="horaInicio" value="@Model.horaInicioDisplay" placeholder="Data de início" required>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4">
+            <div class="form-group">
+                <label for="HoraFim">Data final da análise</label>
+                <input type="datetime-local" class="form-control" id="HoraFim" name="HoraFim" value="@Model.horaFimDisplay" placeholder="Data final" required>
+            </div>
+
+        </div>
+    </div>
+   
+    <button type="submit" class="btn btn-success">Editar</button>
+
+    </form>
+</div>
