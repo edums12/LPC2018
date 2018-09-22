@@ -3,15 +3,17 @@ using System;
 using AppChamados.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AppChamados.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20180921225958_Three migrations")]
+    partial class Threemigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,29 +36,13 @@ namespace AppChamados.Migrations
 
                     b.Property<string>("problema");
 
-                    b.Property<int>("situacaoId");
-
                     b.Property<int>("solicitanteId");
 
                     b.HasKey("id");
 
-                    b.HasIndex("situacaoId");
-
                     b.HasIndex("solicitanteId");
 
                     b.ToTable("Chamados");
-                });
-
-            modelBuilder.Entity("AppChamados.Models.Situacoes", b =>
-                {
-                    b.Property<int?>("id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("descricao");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Situacoes");
                 });
 
             modelBuilder.Entity("AppChamados.Models.Solicitante", b =>
@@ -77,11 +63,6 @@ namespace AppChamados.Migrations
 
             modelBuilder.Entity("AppChamados.Models.Chamados", b =>
                 {
-                    b.HasOne("AppChamados.Models.Situacoes", "situacao")
-                        .WithMany("chamados")
-                        .HasForeignKey("situacaoId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("AppChamados.Models.Solicitante", "solicitante")
                         .WithMany("chamados")
                         .HasForeignKey("solicitanteId")

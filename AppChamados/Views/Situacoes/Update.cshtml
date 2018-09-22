@@ -1,0 +1,33 @@
+@model AppChamados.Models.Situacoes
+
+
+@{
+    ViewData["Title"] = "Editar situação";
+}
+
+<br><br>
+
+<h2>@ViewData["Title"]</h2>
+
+<br>
+
+<div class="form-horizontal">
+    <form action='@ViewData["base_url"]/Situacoes/Update' method="Post">
+
+    <div class="form-group">
+        <input type="hidden" class="form-control" id="id" name="id" value="@Model.id" required>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="descricao">Descrição</label>
+                <input type="text" class="form-control" id="descricao" name="descricao" value="@Model.descricao" placeholder="Descrição da situação" required>
+            </div>
+        </div>
+    </div>
+    
+    <button type="submit" class="btn btn-success">Editar</button>
+
+    </form>
+</div>

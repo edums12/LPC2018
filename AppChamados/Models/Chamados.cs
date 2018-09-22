@@ -4,20 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace AppChamados.Models {
+    [Table("Chamados")]
     public class Chamados {
-        public Chamados(int? id, string numero, DateTime data, string nome, string telefone, string email, string problema, DateTime dataSolucao, DateTime horaInicio, DateTime horaFim)
+        public Chamados(int? id, string numero, int solicitanteId, string problema, DateTime dataSolucao, DateTime horaInicio, DateTime horaFim, int situacaoId)
         {
             this.id = id;
 
             this.numero = numero;
-
-            this.data = data;
-
-            this.nome = nome;
-
-            this.telefone = telefone;
-
-            this.email = email;
+            
+            this.solicitanteId = solicitanteId;
 
             this.problema = problema;
 
@@ -27,50 +22,29 @@ namespace AppChamados.Models {
 
             this.horaFim = horaFim;
 
+            this.situacaoId = situacaoId;
+
         }
 
+        public Chamados(){}
+
         public Chamados(Chamados pChamado)
+        : this(pChamado.id, pChamado.numero, pChamado.solicitanteId, pChamado.problema, pChamado.dataSolucao, pChamado.horaInicio, pChamado.horaFim, pChamado.situacaoId)
         {
-            this.id = pChamado.id;
-            
-            this.numero = pChamado.numero;
-            
-            this.data = pChamado.data;
-            
-            this.nome = pChamado.nome;
-            
-            this.telefone = pChamado.telefone;
-            
-            this.email = pChamado.email;
-            
-            this.problema = pChamado.problema;
-            
-            this.dataSolucao = pChamado.dataSolucao;
-            
-            this.horaInicio = pChamado.horaInicio;
-            
-            this.horaFim = pChamado.horaFim;
-            
+        
         }
 
         public int? id { get; set; }
 
         public string numero { get; set; }
 
-        public DateTime data { get; set; }
+        public int solicitanteId { get; set; }
 
-        [NotMapped]
-        public string dataDisplay{
-            get {
-                return this.data.ToString("yyyy-MM-dd");
-            }
-        }
+        public Solicitante solicitante { get; set; }
+        
+        public int situacaoId { get; set; }
 
-        public string nome { get; set; }
-
-        public string telefone { get; set; }
-
-        public string email { get; set; }
+        public Situacoes situacao { get; set; }
 
         public string problema { get; set; }
 
@@ -79,7 +53,7 @@ namespace AppChamados.Models {
         [NotMapped]
         public string dataSolucaoDisplay{
             get {
-                return this.dataSolucao.ToString("yyyy-MM-dd");
+                return this.dataSolucao.ToString("yyyy-MM-ddTHH:mm");
             }
         }
 
@@ -103,8 +77,6 @@ namespace AppChamados.Models {
 
         [NotMapped]
         public double totalHorasAtendimento { get; set; }
-
-        
 
         public Chamados Clone()
         {

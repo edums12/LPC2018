@@ -22,39 +22,33 @@
             </div>
         </div>
         <div class="col-sm-6 col-md-4">
-            <div class="form-group">
-                <label for="dataAtendimento">Data do atendimento</label>
-                <input type="date" class="form-control" id="dataAtendimento" name="data" placeholder="Data do atendimento" required>
-            </div>
+            <label for="solicitante">Solicitante</label>
+            <select class="form-control" name="solicitanteId" id="solicitante" required>
+                    <option value="" disabled selected>Selecione o solicitante</option>
+                @foreach(var solicitante in ViewBag.solicitantes ){
+                    <option value="@solicitante.id">@solicitante.id | @solicitante.nome</option>
+                }
+            </select>
         </div>
-        <div class="col-sm-12 col-md-6">
-            <div class="form-group">
-                <label for="nomeSolicitante">Nome do solicitante</label>
-                <input type="text" class="form-control" id="nomeSolicitante" name="nome" placeholder="Nome do solicitante" required>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-6">
-            <div class="form-group">
-                <label for="emailSolicitante">E-mail do solicitante</label>
-                <input type="email" class="form-control" id="emailSolicitante" name="email" placeholder="E-mail do solicitante" required>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-6">
-            <div class="form-group">
-                <label for="telefoneSolicitante">Telefone do solicitante</label>
-                <input type="text" class="form-control" id="telefoneSolicitante" name="telefone" placeholder="Telefone do solicitante" required>
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-12">
+        <div class="col-sm-12 col-md-4">
             <div class="form-group">
                 <label for="problema">Problema constatado</label>
                 <input type="text" class="form-control" id="problema" name="problema" placeholder="Problema" required>
             </div>    
         </div>
+        <div class="col-sm-6 col-md-2">
+            <label for="situacao">Situação</label>
+            <select class="form-control" name="situacaoId" id="situacao" required>
+                    <option value="" disabled selected>Selecione a Situação</option>
+                @foreach(var situacao in ViewBag.situacoes ){
+                    <option value="@situacao.id">@situacao.id | @situacao.descricao</option>
+                }
+            </select>
+        </div>
         <div class="col-sm-4 col-md-4">
             <div class="form-group">
                 <label for="dataSolucao">Data da solução</label>
-                <input type="date" class="form-control" id="dataSolucao" name="dataSolucao" placeholder="Data da solução do problema" required>
+                <input type="datetime-local" class="form-control" id="dataSolucao" name="dataSolucao" placeholder="Data da solução do problema" required>
             </div>
         </div>
         <div class="col-sm-4 col-md-4">

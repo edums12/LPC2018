@@ -1,0 +1,44 @@
+@model IEnumerable<AppChamados.Models.Solicitante>
+
+@{
+    ViewData["Title"] = "Solicitantes";
+}
+
+<main>
+    <br>
+
+    <h2>@ViewData["Title"]</h2>
+
+    <br>
+
+    <a href="./Solicitantes/Create" class="btn btn-success">Novo solicitante</a>
+
+    <br>
+    <br>
+
+    <table class="table table-striped table-bordered table-hover table-responsive">
+        <caption>Lista de Solicitantes</caption>
+        <thead class="thead-light">
+            <th class="text-center">Id</th>
+            <th class="text-center">Nome</th>
+            <th class="text-center">E-mail</th>
+            <th class="text-center">Telefone</th>
+            <th class="text-center">Ações</th>
+        </thead>
+
+        <tbody>
+            @foreach(var solicitante in Model ){
+            <tr>
+                <td class="text-center">@solicitante.id</td>
+                <td class="text-center">@solicitante.nome</td>
+                <td class="text-center">@solicitante.email</td>
+                <td class="text-center">@solicitante.telefone</td>
+                <td class="text-center">
+                    <a href="./Solicitantes/Delete/@solicitante.id" class="text-danger"><i class="material-icons">delete</i></a>
+                    <a href="./Solicitantes/Update/@solicitante.id" class="text-info"><i class="material-icons">edit</i></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</main>

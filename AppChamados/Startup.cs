@@ -42,6 +42,8 @@ namespace AppChamados
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddScoped<IRepositoryChamados, ChamadosRepository>();
+            services.AddScoped<IRepositorySolicitantes, SolicitanteRepository>();
+            services.AddScoped<IRepositorySituacoes, SituacoesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

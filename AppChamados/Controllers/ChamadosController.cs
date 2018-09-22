@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AppChamados.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,16 +8,25 @@ namespace AppChamados.Controllers
 {
     public class ChamadosController : Controller
     {
-        private readonly IRepositoryChamados _repository;
+        private readonly IRepositoryChamados _repositoryChamados;
 
-        public ChamadosController(IRepositoryChamados pRepository)
+        private readonly IRepositorySolicitantes _repositorySolicitantes;
+
+        private readonly IRepositorySituacoes _repositorySituacoes;
+
+        public ChamadosController(IRepositoryChamados pRepositoryChamados, IRepositorySolicitantes pRepositorySolicitante, IRepositorySituacoes pRepositorySituacoes)
         {
-            _repository = pRepository;
+            _repositoryChamados = pRepositoryChamados;
+
+            _repositorySolicitantes = pRepositorySolicitante;
+
+            _repositorySituacoes = pRepositorySituacoes;
+            
         }
 
         public IActionResult index()
         {
-            var chamados = _repository.Get();
+            var chamados = _repositoryChamados.Get();
 
             chamados.ForEach(it => {
                 it.totalHorasAtendimento = (it.horaFim.Subtract(it.horaInicio)).TotalHours;
@@ -26,27 +36,46 @@ namespace AppChamados.Controllers
         }
 
         public IActionResult create()
-        {
+        {   
+            ViewBag.solicitantes = _repositorySolicitantes.Get();
+
+            ViewBag.situacoes = _repositorySituacoes.Get();
+
             return View();
         }
 
         [HttpPost]
-        public IActionResult create(string numero, DateTime data, string nome, string telefone, string email, string problema, DateTime dataSolucao, DateTime horaInicio, DateTime horaFim)
+        public IActionResult create(string numero, int solicitanteId, string problema, DateTime dataSolucao, DateTime horaInicio, DateTime horaFim, int situacaoId)
         {
-            _repository.Create(new Chamados(null, numero, data, nome, telefone, email, problema, dataSolucao, horaInicio, horaFim));
+            _repositoryChamados.Create(
+                new Chamados(
+                    null, 
+                    numero, 
+                    solicitanteId,
+                    problema, 
+                    dataSolucao, 
+                    horaInicio, 
+                    horaFim,
+                    situacaoId
+                )
+            );
 
             return RedirectToAction("index");
         }
 
         public IActionResult delete(int id){
-            _repository.Delete(id);
+            _repositoryChamados.Delete(id);
 
             return RedirectToAction("index");
         }
 
         [HttpGet]
         public IActionResult update(int id){
-            var chamado = _repository.Get(id);
+            var chamado = _repositoryChamados.Get(id);
+
+            ViewBag.solicitantes = _repositorySolicitantes.Get();
+
+            ViewBag.situacoes = _repositorySituacoes.Get();
 
             ViewData["base_url"] = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}";
 
@@ -54,11 +83,21 @@ namespace AppChamados.Controllers
         }
 
         [HttpPost]
-        public IActionResult update(int id, string numero, DateTime data, string nome, string telefone, string email, string problema, DateTime dataSolucao, DateTime horaInicio, DateTime horaFim){
+        public IActionResult update(int id, string numero, int solicitanteId, string problema, DateTime dataSolucao, DateTime horaInicio, DateTime horaFim, int situacaoId){
 
-            Chamados chamado = new Chamados(id, numero, data, nome, telefone, email, problema, dataSolucao, horaInicio, horaFim);
+            Chamados chamado = 
+                new Chamados(
+                    id, 
+                    numero, 
+                    solicitanteId,
+                    problema, 
+                    dataSolucao, 
+                    horaInicio, 
+                    horaFim,
+                    situacaoId
+                );
 
-            _repository.Update(chamado);
+            _repositoryChamados.Update(chamado);
 
             return RedirectToAction("index");
         }

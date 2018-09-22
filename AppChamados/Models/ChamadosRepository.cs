@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace AppChamados.Models
 {
@@ -30,7 +31,7 @@ namespace AppChamados.Models
 
         public List<Chamados> Get()
         {
-            return this.DataContext.Chamado.OrderBy(it => it.id).ToList();
+            return this.DataContext.Chamado.Include(it => it.solicitante).Include(it => it.situacao).OrderBy(it => it.id).ToList();
         }
 
         public Chamados Get(int? pId)
@@ -38,7 +39,7 @@ namespace AppChamados.Models
             if(pId == null)
                 return this.Get().FirstOrDefault();
 
-            return this.DataContext.Chamado.ToList().Find(it => it.id == pId);
+            return this.DataContext.Chamado.Include(it => it.solicitante).Include(it => it.situacao).ToList().Find(it => it.id == pId);
         }
 
         public void Update(Chamados pNewChamado)
@@ -47,13 +48,7 @@ namespace AppChamados.Models
 
             chamado.numero = pNewChamado.numero;
 
-            chamado.data = pNewChamado.data;
-
-            chamado.nome = pNewChamado.nome;
-
-            chamado.telefone = pNewChamado.telefone;
-
-            chamado.email = pNewChamado.email;
+            chamado.solicitanteId = pNewChamado.solicitanteId;
 
             chamado.problema = pNewChamado.problema;
 
@@ -62,6 +57,8 @@ namespace AppChamados.Models
             chamado.horaInicio = pNewChamado.horaInicio;
 
             chamado.horaFim = pNewChamado.horaFim;
+
+            chamado.situacaoId = pNewChamado.situacaoId;
 
             this.DataContext.SaveChanges();
         }

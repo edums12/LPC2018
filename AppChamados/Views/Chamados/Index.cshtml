@@ -21,33 +21,25 @@
         <thead class="thead-light">
             <th class="text-center">Id</th>
             <th class="text-center">Número</th>
-            <th class="text-center">Data</th>
             <th class="text-center">Nome solicitante</th>
-            <th class="text-center">E-mail</th>
-            <th class="text-center">Telefone</th>
             <th class="text-center">Problema</th>
             <th class="text-center">Data da solução</th>
-            <th class="text-center">Hora de início</th>
-            <th class="text-center">Hora Final</th>
             <th class="text-center">Total de horas</th>
+            <th class="text-center">Situações</th>
             <th class="text-center">Ações</th>
         </thead>
 
         <tbody>
             @foreach(var chamado in Model ){
             <tr>
-                <td>@chamado.id</td>
-                <td>@chamado.numero</td>
-                <td>@chamado.data</td>
-                <td>@chamado.nome</td>
-                <td>@chamado.email</td>
-                <td>@chamado.telefone</td>
-                <td>@chamado.problema</td>
-                <td>@chamado.dataSolucao</td>
-                <td>@chamado.horaInicio</td>
-                <td>@chamado.horaFim</td>
-                <td>@chamado.totalHorasAtendimento horas</td>
-                <td>
+                <td class="text-center">@chamado.id</td>
+                <td class="text-center">@chamado.numero</td>
+                <td class="text-center">@chamado.solicitante.nome</td>
+                <td class="text-center">@chamado.problema</td>
+                <td class="text-center">@chamado.dataSolucao</td>
+                <td class="text-center">@chamado.totalHorasAtendimento horas</td>
+                <td class="text-center">@chamado.situacao.descricao</td>
+                <td class="text-center">
                     <a href="./Chamados/Delete/@chamado.id" class="text-danger"><i class="material-icons">delete</i></a>
                     <a href="./Chamados/Update/@chamado.id" class="text-info"><i class="material-icons">edit</i></a>
                 </td>
