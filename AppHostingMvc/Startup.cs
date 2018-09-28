@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AppG1
+namespace AppHostingMvc
 {
     public class Startup
     {
@@ -32,13 +31,8 @@ namespace AppG1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<DataContext>(options => options.UseNpgsql(
-                Configuration.GetConnectionString("DefaultConnection")
-            ));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            // services.AddScoped<IRepository, ClassRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
