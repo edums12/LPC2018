@@ -5,12 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.2" />
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.3" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.1.1" />
-    <PackageReference Include="Npgsql" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Associados.Domain\Associados.Domain.csproj" />
+    <ProjectReference Include="..\Associados.Repositories\Associados.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
