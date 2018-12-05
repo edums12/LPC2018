@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using Associados.API.Controllers.DTOs;
 using Associados.Domain;
 using Associados.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -22,47 +23,78 @@ namespace Associados.API.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<Usuario> Get()
+        [Authorize]
+        public async Task<List<UsuarioDTO>> Get()
         {
-            return this.repository.Get();
+            List<UsuarioDTO> usuariosSimple = new List<UsuarioDTO>();
+
+            List<Usuario> usuariosCadastrados = await this.repository.Get();
+
+            usuariosCadastrados
+                .ForEach(usuario => {
+                    usuariosSimple.Add(new UsuarioDTO(usuario)); 
+                });
+
+            return usuariosSimple;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public Usuario Get(int id)
+        [Authorize]
+        public async Task<UsuarioDTO> Get(int id)
         {
-            return this.repository.Get(id);
+            return new UsuarioDTO(await this.repository.Get(id));
         }
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody] Usuario usuario)
+        [Authorize]
+        public async Task<IActionResult> Post([FromBody] Usuario usuario)
         {
-            this.repository.Create(usuario);
+            if(ModelState.IsValid)
+            {
+                await this.repository.Create(usuario);
 
-            return Ok(new {
-                message = "Cadastrado com sucesso.",
-                usuario = usuario
-            });
+                return Ok(new {
+                    message = "Cadastrado com sucesso.",
+                    usuario = new UsuarioDTO(usuario)
+                });
+            }
+            else
+            {
+                var errors = new List<string>();
+
+                ModelState.ToList().ForEach(state => {
+                    state.Value.Errors.ToList().ForEach(error =>{
+                        errors.Add(error.ErrorMessage);
+                    });
+                });
+
+                return BadRequest(new {
+                    message = errors
+                });
+            }
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public IActionResult Put([FromBody] Usuario usuario)
+        [Authorize]
+        public async Task<IActionResult> Put([FromBody] Usuario usuario)
         {
-            this.repository.Update(usuario);
+            await this.repository.Update(usuario);
 
             return Ok(new {
                 message = "Atualizado com sucesso.",
-                usuario = usuario
+                usuario = new UsuarioDTO(usuario)
             });
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
         {
-            this.repository.Delete(id);
+            await this.repository.Delete(id);
 
             return Ok(new{
                 message = "Deletado com sucesso.",
@@ -88,13 +120,13 @@ namespace Associados.API.Controllers
 
         private string buildToken()
         {
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("Aula15UlbraLPC"));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("Aula15UlbraTorres"));
 
             var creed = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             
             var token = new JwtSecurityToken(
-                audience: "Aula15UlbraLPC",
-                issuer: "Aula15UlbraLPC",
+                audience: "Aula15",
+                issuer: "Aula15",
                 signingCredentials: creed
             );
             

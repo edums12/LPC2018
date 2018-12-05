@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Associados.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,45 +15,52 @@ namespace Associados.Repositories
             this.dataContext = dataContext;
         }
 
-        public void Create(Usuario usuario)
+        public async Task<bool> Create(Usuario usuario)
         {
             dataContext.Entry(usuario).State = EntityState.Added;
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public void Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            dataContext.Remove(this.Get(id));
+            dataContext.Remove(await this.Get(id));
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public List<Usuario> Get()
+        public async Task<List<Usuario>> Get()
         {
-            return dataContext.Usuarios.ToList();
+            return await dataContext.Usuarios.ToListAsync();
         }
 
-        public Usuario Get(int id)
+        public async Task<Usuario> Get(int id)
         {
-            return this.Get().SingleOrDefault(it => it.id == id);
+            return await dataContext.Usuarios.FirstAsync(it => it.id == id);
         }
 
-        public void Update(Usuario usuario)
+        public async Task<bool> Update(Usuario usuario)
         {
             dataContext.Entry(usuario).State = EntityState.Modified;
             
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public Usuario AuthUser(Usuario usuario)
+        public async Task<Usuario> AuthUser(Usuario usuario)
         {
-            return 
+            return await 
                 dataContext
-                .Usuarios
-                .SingleOrDefault(it => 
-                    it.usuario == usuario.usuario && 
-                    it.senha == System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(usuario.senha)));
+                    .Usuarios
+                    .SingleOrDefaultAsync(it => 
+                        it.usuario == usuario.usuario && 
+                        it.senha == usuario.senha
+                    );
         }
     }
 }

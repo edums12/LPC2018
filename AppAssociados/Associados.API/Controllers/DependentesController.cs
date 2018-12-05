@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Associados.API.Controllers.DTOs;
 using Associados.Domain;
 using Associados.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -21,51 +22,77 @@ namespace Associados.API.Controllers
         // GET api/values
         [HttpGet]
         [Authorize]
-        public IEnumerable<Dependente> Get()
+        public async Task<List<DependenteDTO>> Get()
         {
-            return this.repository.Get();
+            List<DependenteDTO> dependentesSimple = new List<DependenteDTO>();
+
+            List<Dependente> dependentesCadastrados = await this.repository.Get();
+            
+            dependentesCadastrados
+                .ForEach(dependente => {
+                    dependentesSimple.Add(new DependenteDTO(dependente));
+                });
+
+            return dependentesSimple;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         [Authorize]
-        public Dependente Get(int id)
+        public async Task<DependenteDTO> Get(int id)
         {
-            return this.repository.Get(id);
+            return new DependenteDTO(await this.repository.Get(id));
         }
 
         // POST api/values
         [HttpPost]
         [Authorize]
-        public IActionResult Post([FromBody] Dependente dependente)
+        public async Task<IActionResult> Post([FromBody] Dependente dependente)
         {
-            this.repository.Create(dependente);
+            if(ModelState.IsValid)
+            {
+                await this.repository.Create(dependente);
 
-            return Ok(new {
-                message = "Cadastrado com sucesso.",
-                dependente = dependente
-            });
+                return Ok(new {
+                    message = "Cadastrado com sucesso.",
+                    usuario = new DependenteDTO(dependente)
+                });
+            }
+            else
+            {
+                var errors = new List<string>();
+
+                ModelState.ToList().ForEach(state => {
+                    state.Value.Errors.ToList().ForEach(error =>{
+                        errors.Add(error.ErrorMessage);
+                    });
+                });
+
+                return BadRequest(new {
+                    message = errors
+                });
+            }
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Put([FromBody] Dependente dependente)
+        public async Task<IActionResult> Put([FromBody] Dependente dependente)
         {
-            this.repository.Update(dependente);
+            await this.repository.Update(dependente);
 
             return Ok(new {
                 message = "Atualizado com sucesso.",
-                dependente = dependente
+                dependente = new DependenteDTO(dependente)
             });
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         [Authorize]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            this.repository.Delete(id);
+            await this.repository.Delete(id);
 
             return Ok(new{
                 message = "Deletado com sucesso.",

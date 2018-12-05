@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Associados.API.Controllers.DTOs;
 using Associados.Domain;
 using Associados.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -21,51 +22,90 @@ namespace Associados.API.Controllers
         // GET api/values
         [HttpGet]
         [Authorize]
-        public IEnumerable<Associado> Get()
+        public async Task<List<AssociadoDTO>> Get()
         {
-            return this.repository.Get();
+            List<AssociadoDTO> associadosSimple = new List<AssociadoDTO>();
+
+            List<Associado> associadosCadastrados = await this.repository.Get();
+            
+            associadosCadastrados
+                .ForEach(associado => {
+                    associadosSimple.Add(new AssociadoDTO(associado));
+                });
+
+            return associadosSimple;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         [Authorize]
-        public Associado Get(int id)
+        public async Task<AssociadoDTO> Get(int id)
         {
-            return this.repository.Get(id);
+            return new AssociadoDTO(await this.repository.Get(id));
         }
 
         // POST api/values
         [HttpPost]
         [Authorize]
-        public IActionResult Post([FromBody] Associado associado)
+        public async Task<IActionResult> Post([FromBody] Associado associado)
         {
-            this.repository.Create(associado);
+            // Se o associado possui dependentes
+            if(associado.dependentes?.Any() ?? false)
+            {
+                // Faz o tratamento para atribuir os dependentes a esse associado
+                associado.dependentes.ForEach(it => it.associado = associado );
 
-            return Ok(new {
-                message = "Cadastrado com sucesso.",
-                associado = associado
-            });
+                // Limpara a validação do modelstate
+                ModelState.Clear();
+
+                // Pede para revalidar associado
+                TryValidateModel(associado);
+            }
+           
+            if(ModelState.IsValid)
+            {
+                await this.repository.Create(associado);
+
+                return Ok(new {
+                    message = "Cadastrado com sucesso.",
+                    usuario = new AssociadoDTO(associado)
+                });
+            }
+            else
+            {
+                var errors = new List<string>();
+
+                ModelState.ToList().ForEach(state => {
+                    state.Value.Errors.ToList().ForEach(error =>{
+                        errors.Add(error.ErrorMessage);
+                    });
+                });
+
+                return BadRequest(new {
+                    message = errors
+                });
+            }
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Put([FromBody] Associado associado)
+        public async Task<IActionResult> Put([FromBody] Associado associado)
         {
-            this.repository.Update(associado);
+            await this.repository.Update(associado);
 
             return Ok(new {
                 message = "Atualizado com sucesso.",
-                associado = associado
+                associado = new AssociadoDTO(associado)
             });
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         [Authorize]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            this.repository.Delete(id);
+            await this.repository.Delete(id);
 
             return Ok(new{
                 message = "Deletado com sucesso.",

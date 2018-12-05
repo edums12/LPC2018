@@ -6,13 +6,13 @@ namespace Associados.Domain
 {
     public class Associado
     {
-        [Required(ErrorMessage = "ID é obrigatório")]        
         public int id { get; set; }
 
         [Required(ErrorMessage = "Nome é obrigatório")]
         public string nome { get; set; }
 
         [Required(ErrorMessage = "CPF é obrigatório")]
+        [StringLength(11, ErrorMessage = "CPF deve conter 11 dígitos, sem caracteres especiais")]
         public string cpf { get; set; }
 
         public DateTime dataCadastro { get; set; }
@@ -23,8 +23,7 @@ namespace Associados.Domain
         public string cidade { get; set; }
 
         [Required(ErrorMessage = "UF é obrigatório")]
-        [MinLength(2, ErrorMessage = "UF deve possui 2 caracteres")]
-        [MaxLength(2, ErrorMessage = "UF deve possui 2 caracteres")]
+        [StringLength(2, ErrorMessage = "UF deve possui 2 caracteres")]
         public string uf { get; set; }
 
         public List<string> email { get; set; }

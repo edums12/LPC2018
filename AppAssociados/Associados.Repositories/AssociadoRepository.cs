@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Associados.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,37 +15,44 @@ namespace Associados.Repositories
             this.dataContext = dataContext;
         }
 
-        public void Create(Associado associado)
+        public async Task<bool> Create(Associado associado)
         {
             dataContext.Entry(associado).State = EntityState.Added;
 
-            foreach (var dependente in associado.dependentes)
+            if (associado.dependentes?.Any() ?? false)
             {
-                dataContext.Entry(dependente).State = EntityState.Added;
+                foreach (var dependente in associado.dependentes)
+                    dataContext.Entry(dependente).State = EntityState.Added;
             }
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public List<Associado> Get()
+        public async Task<List<Associado>> Get()
         {
-            return dataContext.Associados.Include(it => it.dependentes).ToList();
+            return await dataContext.Associados.Include(it => it.dependentes).ToListAsync();
         }
 
-        public Associado Get(int id){
-            return this.Get().SingleOrDefault(it => it.id == id);
+        public async Task<Associado> Get(int id){
+            return await dataContext.Associados.Include(it => it.dependentes).FirstAsync(it => it.id == id);
         }
 
-        public void Update(Associado associado){
+        public async Task<bool> Update(Associado associado){
             dataContext.Entry(associado).State = EntityState.Modified;
            
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public void Delete(int id){
-            dataContext.Associados.Remove(this.Get(id));
+        public async Task<bool> Delete(int id){
+            dataContext.Associados.Remove(await this.Get(id));
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

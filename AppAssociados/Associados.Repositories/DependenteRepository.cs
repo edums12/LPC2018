@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Associados.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,32 +15,43 @@ namespace Associados.Repositories
             this.dataContext = dataContext;
         }
 
-        public void Create(Dependente dependente)
+        public async Task<bool> Create(Dependente dependente)
         {
             dataContext.Entry(dependente).State = EntityState.Added;
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public List<Dependente> Get()
+        public async Task<List<Dependente>> Get()
         {
-            return dataContext.Dependentes.ToList();
+            return await dataContext.Dependentes.Include(it => it.associado).ToListAsync();
         }
 
-        public Dependente Get(int id){
-            return this.Get().SingleOrDefault(it => it.id == id);
+        public async Task<Dependente> Get(int id){
+            return await 
+                dataContext
+                .Dependentes
+                .FirstAsync(it => 
+                    it.id == id
+                );
         }
 
-        public void Update(Dependente dependente){
+        public async Task<bool> Update(Dependente dependente){
             dataContext.Entry(dependente).State = EntityState.Modified;
            
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
 
-        public void Delete(int id){
-            dataContext.Dependentes.Remove(this.Get(id));
+        public async Task<bool> Delete(int id){
+            dataContext.Dependentes.Remove(await this.Get(id));
 
-            dataContext.SaveChanges();
+            await dataContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

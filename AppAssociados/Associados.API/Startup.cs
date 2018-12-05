@@ -40,9 +40,9 @@ namespace Associados.API
                         ValidateAudience = true,
                         ValidateLifetime = false,
                         ValidateIssuerSigningKey = true,
-                        ValidAudience = "Aula15UlbraLPC",
-                        ValidIssuer = "Aula15UlbraLPC",
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("Aula15UlbraLPC"))
+                        ValidAudience = "Aula15",
+                        ValidIssuer = "Aula15",
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("Aula15UlbraTorres"))
                     }
             );
 
@@ -62,6 +62,7 @@ namespace Associados.API
 
             services.AddScoped<IRepositoryCrud<Associado>, AssociadoRepository>();
             services.AddScoped<IRepositoryCrud<Dependente>, DependenteRepository>();
+            services.AddScoped<IRepositoryUsuario, UsuarioRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
